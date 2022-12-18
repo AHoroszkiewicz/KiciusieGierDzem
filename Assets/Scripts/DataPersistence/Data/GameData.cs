@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class GameData
 {
-    public int points;
+    public List<ItemHandler> items;
 
     public GameData()
     {
-        this.points = 0;
+        items = new List<ItemHandler>();
     }
 }

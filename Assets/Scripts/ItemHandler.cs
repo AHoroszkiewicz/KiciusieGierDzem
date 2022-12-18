@@ -6,15 +6,15 @@ using Unity.VisualScripting;
 using UnityEngine;
 using ReadOnlyAttribute = Unity.Collections.ReadOnlyAttribute;
 
-public class Dragger : MonoBehaviour
+public class ItemHandler : MonoBehaviour
 {
-    [ReadOnly] [SerializeField] bool aboveBackpack, onTable, isDynamic;
+    [ReadOnly][SerializeField] bool aboveBackpack, isDynamic; 
+        public bool inBackpack;
     Vector3 startingPos;
 
     private void Start()
     {
         startingPos= transform.position;
-        onTable = true;
     }
 
     private void OnMouseDown()
@@ -33,6 +33,7 @@ public class Dragger : MonoBehaviour
 
     private void OnMouseUp()
     {
+        inBackpack= false;
         gameObject.GetComponent<Collider2D>().isTrigger = false;
         if (aboveBackpack)
         {
@@ -46,8 +47,6 @@ public class Dragger : MonoBehaviour
     {
         if (collision.gameObject.layer == 7) 
             aboveBackpack = true;
-        else if (collision.gameObject.layer == 8) 
-            onTable = true;
         else if (collision.gameObject.CompareTag("OutOfBounds")) ResetPos();
     }
 
@@ -55,9 +54,8 @@ public class Dragger : MonoBehaviour
     {
         if (collision.gameObject.layer == 7)
             aboveBackpack = false;
-        else if (collision.gameObject.layer == 8)
-            onTable = false;
         else if (collision.gameObject.CompareTag("OutOfBounds")) ResetPos();
+        if (collision.gameObject.CompareTag("InBackpack")) inBackpack= true;
     }
 
     private Vector3 GetMousePos()
